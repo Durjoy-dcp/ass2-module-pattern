@@ -27,7 +27,7 @@ export type User = {
 };
 
 export type Usermethods = {
-  isExists(id: number): Promise<User | null>;
+  isExists(id: string): Promise<User | null>;
 };
 
 export type UsermethodModel = Model<User, {}, Usermethods>;
