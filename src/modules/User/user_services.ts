@@ -6,7 +6,7 @@ const CreateUserToDB = async (userData: User) => {
 
   const returnResult = await UserModel.findOne(
     { userId: result.userId },
-    { password: 0 }
+    { password: 0, orders: 0, _id: 0 }
   );
 
   return returnResult;
