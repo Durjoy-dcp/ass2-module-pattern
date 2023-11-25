@@ -27,7 +27,10 @@ const userSchema = new Schema<User, UsermethodModel, Usermethods>({
   orders: { type: [orderSchema], default: [] },
 });
 userSchema.method("isExists", async function (id: number) {
-  const existingUser = await UserModel.findOne({ userId: id });
+  const existingUser = await UserModel.findOne(
+    { userId: id },
+    { _id: 0, password: 0, age: 0, orders: 0 }
+  );
   return existingUser;
 });
 
