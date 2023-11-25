@@ -1,5 +1,5 @@
 import { Schema, model, connect } from "mongoose";
-import { Order, User } from "./user_interface";
+import { Order, User, UsermethodModel, Usermethods } from "./user_interface";
 
 const orderSchema = new Schema<Order>({
   productName: { type: String, required: true },
@@ -7,7 +7,7 @@ const orderSchema = new Schema<Order>({
   quantity: { type: Number, required: true },
 });
 
-const userSchema = new Schema<User>({
+const userSchema = new Schema<User, UsermethodModel, Usermethods>({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -26,4 +26,9 @@ const userSchema = new Schema<User>({
   hobbies: { type: [String], required: true },
   orders: { type: [orderSchema], default: [] },
 });
-export const UserModel = model<User>("User", userSchema);
+userSchema.method("isExists", async function (id: number) {
+  const existingUser = await UserModel.findOne({ userId: id });
+  return existingUser;
+});
+
+export const UserModel = model<User, UsermethodModel>("User", userSchema);

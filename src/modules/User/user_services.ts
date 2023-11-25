@@ -22,7 +22,6 @@ const GetUsersFromDB = async () => {
       address: 1,
     }
   );
-  console.log(result);
 
   return result;
 };
