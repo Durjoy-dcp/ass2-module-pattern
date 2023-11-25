@@ -123,9 +123,42 @@ const getSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const User = new UserModel();
+
+    const userData = await User.isExists(userId);
+    if (userData) {
+      const result = UserServices.DeleteOneUser(userId);
+      res.status(200).json({
+        success: true,
+        message: "Deleted successfully",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Somthing went wrong",
+      error: error,
+    });
+  }
+};
 export const UserController = {
   createUser,
   getUsers,
   editUser,
   getSingleUser,
+  deleteUser,
 };
