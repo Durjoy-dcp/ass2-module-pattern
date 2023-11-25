@@ -15,6 +15,7 @@ export type User = {
     lastName: string;
   };
   email: string;
+  age: number;
   isActive: boolean;
   address: {
     street: string;
