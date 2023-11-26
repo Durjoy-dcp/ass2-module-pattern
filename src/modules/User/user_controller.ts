@@ -132,7 +132,7 @@ const deleteUser = async (req: Request, res: Response) => {
 
     const userData = await User.isExists(userId);
     if (userData) {
-      const result = UserServices.DeleteOneUser(userId);
+      const result = await UserServices.DeleteOneUser(userId);
       res.status(200).json({
         success: true,
         message: "User deleted successfully",
@@ -164,7 +164,7 @@ const addOrder = async (req: Request, res: Response) => {
     const { error, value } = await orderSchema.validate(req.body);
     const userData = await User.isExists(userId);
     if (userData && !error) {
-      const result = UserServices.addOrder(userId, value);
+      const result = await UserServices.addOrder(userId, value);
       res.status(200).json({
         success: true,
         message: "Order created successfully!",
@@ -189,11 +189,43 @@ const addOrder = async (req: Request, res: Response) => {
   }
 };
 
+const getOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const User = new UserModel();
+    const userData = await User.isExists(userId);
+    if (userData) {
+      const result = await UserServices.getOrderFromDB(userId);
+      res.status(200).json({
+        success: true,
+        message: "Order fetched successfully!",
+        data: result,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something Went wrong ",
+        error: {
+          code: 404,
+          description: "Something Went wrong",
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Somthing went wrong",
+      error: error,
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getUsers,
   editUser,
   getSingleUser,
   deleteUser,
+  getOrder,
   addOrder,
 };
