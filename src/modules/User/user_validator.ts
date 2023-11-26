@@ -1,12 +1,12 @@
 import Joi from "joi";
 import { Order, User } from "./user_interface";
-const orderSchema = Joi.object<Order>({
+export const orderSchema = Joi.object<Order>({
   productName: Joi.string().required(),
   price: Joi.number().required(),
   quantity: Joi.number().required(),
 });
 
-const userSchemaValidator = Joi.object<User>({
+export const userSchemaValidator = Joi.object<User>({
   userId: Joi.number().required(),
   username: Joi.string().required(),
   password: Joi.string().required(),
@@ -23,7 +23,5 @@ const userSchemaValidator = Joi.object<User>({
     country: Joi.string().required(),
   }).required(),
   hobbies: Joi.array().items(Joi.string()).required(),
-  orders: Joi.array().items(orderSchema).default([]),
+  orders: Joi.array().items(orderSchema),
 });
-
-export default userSchemaValidator;

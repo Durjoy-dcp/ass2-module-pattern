@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserServices } from "./user_services";
-import userSchemaValidator from "./user_validator";
 import { UserModel } from "./user_model";
+import { orderSchema, userSchemaValidator } from "./user_validator";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -135,7 +135,8 @@ const deleteUser = async (req: Request, res: Response) => {
       const result = UserServices.DeleteOneUser(userId);
       res.status(200).json({
         success: true,
-        message: "Deleted successfully",
+        message: "User deleted successfully",
+        data: null,
       });
     } else {
       res.status(400).json({
@@ -155,10 +156,44 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+const addOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const User = new UserModel();
+    const { error, value } = await orderSchema.validate(req.body);
+    const userData = await User.isExists(userId);
+    if (userData && !error) {
+      const result = UserServices.addOrder(userId, value);
+      res.status(200).json({
+        success: true,
+        message: "Order created successfully!",
+        data: null,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something Went wrong ",
+        error: {
+          code: 404,
+          description: "Not inserted",
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Somthing went wrong",
+      error: error,
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getUsers,
   editUser,
   getSingleUser,
   deleteUser,
+  addOrder,
 };

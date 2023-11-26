@@ -1,4 +1,4 @@
-import { User } from "./user_interface";
+import { Order, User } from "./user_interface";
 import { UserModel } from "./user_model";
 
 const CreateUserToDB = async (userData: User) => {
@@ -52,10 +52,19 @@ const DeleteOneUser = async (userId: string) => {
   console.log(result);
   return result;
 };
+
+const addOrder = async (userId: string, order: Order) => {
+  const result = await UserModel.updateOne(
+    { userId: userId },
+    { $addToSet: { orders: order } }
+  );
+  return result;
+};
 export const UserServices = {
   CreateUserToDB,
   GetUsersFromDB,
   GetSingleUserFromDB,
   UpdateOneUser,
   DeleteOneUser,
+  addOrder,
 };
