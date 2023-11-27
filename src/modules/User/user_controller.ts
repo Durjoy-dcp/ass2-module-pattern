@@ -220,6 +220,38 @@ const getOrder = async (req: Request, res: Response) => {
   }
 };
 
+const getTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const User = new UserModel();
+    const userData = await User.isExists(userId);
+    if (userData) {
+      const result = await UserServices.GetTotalPriceOfOrders(userId);
+      console.log(result);
+      res.status(200).json({
+        success: true,
+        message: "Total price calculated successfully!",
+        data: result,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something Went wrong ",
+        error: {
+          code: 404,
+          description: "Something Went wrong",
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Somthing went wrong",
+      error: error,
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getUsers,
@@ -228,4 +260,5 @@ export const UserController = {
   deleteUser,
   getOrder,
   addOrder,
+  getTotalPrice,
 };
