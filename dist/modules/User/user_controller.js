@@ -58,10 +58,11 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 });
             }
             else {
-                user_services_1.UserServices.UpdateOneUser(userId, req.body.user);
+                const result = yield user_services_1.UserServices.UpdateOneUser(userId, req.body.user);
                 res.status(200).json({
                     success: true,
                     message: "User Updated",
+                    data: result,
                 });
             }
         }
