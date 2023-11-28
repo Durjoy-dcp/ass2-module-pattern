@@ -33,7 +33,7 @@ const userSchema = new mongoose_1.Schema({
         country: { type: String, required: true },
     },
     hobbies: { type: [String], required: true },
-    orders: { type: [orderSchema], default: [] },
+    orders: { type: [orderSchema] },
 });
 userSchema.method("isExists", function (id) {
     return __awaiter(this, void 0, void 0, function* () {

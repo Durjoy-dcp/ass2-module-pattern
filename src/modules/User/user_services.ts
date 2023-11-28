@@ -43,13 +43,13 @@ const GetSingleUserFromDB = async (userId: string) => {
 const UpdateOneUser = async (userId: string, user: User) => {
   const result = await UserModel.updateOne({ userId: userId }, { $set: user });
 
-  console.log(result);
+  // console.log(result);
   return result;
 };
 const DeleteOneUser = async (userId: string) => {
   const result = await UserModel.deleteOne({ userId: userId });
 
-  console.log(result);
+  // console.log(result);
   return result;
 };
 

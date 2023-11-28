@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.userSchemaValidator = exports.orderSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
-const orderSchema = joi_1.default.object({
+exports.orderSchema = joi_1.default.object({
     productName: joi_1.default.string().required(),
     price: joi_1.default.number().required(),
     quantity: joi_1.default.number().required(),
 });
-const userSchemaValidator = joi_1.default.object({
+exports.userSchemaValidator = joi_1.default.object({
     userId: joi_1.default.number().required(),
     username: joi_1.default.string().required(),
     password: joi_1.default.string().required(),
@@ -26,6 +27,5 @@ const userSchemaValidator = joi_1.default.object({
         country: joi_1.default.string().required(),
     }).required(),
     hobbies: joi_1.default.array().items(joi_1.default.string()).required(),
-    orders: joi_1.default.array().items(orderSchema).default([]),
+    orders: joi_1.default.array().items(exports.orderSchema),
 });
-exports.default = userSchemaValidator;

@@ -7,7 +7,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { user } = req.body;
     const { error, value } = userSchemaValidator.validate(user);
-    console.log({ error }, { value });
+    // console.log({ error }, { value });
     if (error) {
       res.status(400).json({
         success: false,
@@ -227,7 +227,7 @@ const getTotalPrice = async (req: Request, res: Response) => {
     const userData = await User.isExists(userId);
     if (userData) {
       const result = await UserServices.GetTotalPriceOfOrders(userId);
-      console.log(result);
+      // console.log(result);
       res.status(200).json({
         success: true,
         message: "Total price calculated successfully!",

@@ -38,12 +38,50 @@ const GetSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, functi
 });
 const UpdateOneUser = (userId, user) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.updateOne({ userId: userId }, { $set: user });
-    console.log(result);
+    // console.log(result);
+    return result;
+});
+const DeleteOneUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.deleteOne({ userId: userId });
+    // console.log(result);
+    return result;
+});
+const addOrder = (userId, order) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.updateOne({ userId: userId }, { $addToSet: { orders: order } });
+    return result;
+});
+const getOrderFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.findOne({ userId: userId }, { orders: 1, _id: 0 });
+    return result;
+});
+const GetTotalPriceOfOrders = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    // const numberUserId=parseInt
+    const result = yield user_model_1.UserModel.aggregate([
+        { $match: { userId: parseInt(userId) } },
+        {
+            $unwind: "$orders",
+        },
+        {
+            $group: {
+                _id: "$userId",
+                totalPrice: {
+                    $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+                },
+            },
+        },
+        {
+            $project: { totalPrice: 1, _id: 0 },
+        },
+    ]);
     return result;
 });
 exports.UserServices = {
     CreateUserToDB,
     GetUsersFromDB,
+    GetTotalPriceOfOrders,
     GetSingleUserFromDB,
     UpdateOneUser,
+    DeleteOneUser,
+    addOrder,
+    getOrderFromDB,
 };
