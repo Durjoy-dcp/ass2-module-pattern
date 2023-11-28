@@ -41,10 +41,14 @@ const GetSingleUserFromDB = async (userId: string) => {
 };
 
 const UpdateOneUser = async (userId: string, user: User) => {
-  const result = await UserModel.updateOne({ userId: userId }, { $set: user });
+  await UserModel.updateOne({ userId: userId }, { $set: user });
 
+  const returnResult = await UserModel.findOne(
+    { userId: userId },
+    { password: 0, orders: 0, _id: 0 }
+  );
   // console.log(result);
-  return result;
+  return returnResult;
 };
 const DeleteOneUser = async (userId: string) => {
   const result = await UserModel.deleteOne({ userId: userId });

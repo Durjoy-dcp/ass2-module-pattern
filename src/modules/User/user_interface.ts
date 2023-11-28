@@ -1,4 +1,4 @@
-import { Model, Schema, model, connect } from "mongoose";
+import { Model } from "mongoose";
 
 export type Order = {
   productName: string;
@@ -30,4 +30,4 @@ export type Usermethods = {
   isExists(id: string): Promise<User | null>;
 };
 
-export type UsermethodModel = Model<User, {}, Usermethods>;
+export type UsermethodModel = Model<User, Record<string, never>, Usermethods>;

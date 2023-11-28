@@ -49,7 +49,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const User = new user_model_1.UserModel();
         const userData = yield User.isExists(userId);
         if (userData) {
-            const { error, value } = yield user_validator_1.userSchemaValidator.validate(user);
+            const { error } = yield user_validator_1.userSchemaValidator.validate(user);
             if (error) {
                 res.status(400).json({
                     success: false,
@@ -58,7 +58,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 });
             }
             else {
-                const result = user_services_1.UserServices.UpdateOneUser(userId, req.body.user);
+                user_services_1.UserServices.UpdateOneUser(userId, req.body.user);
                 res.status(200).json({
                     success: true,
                     message: "User Updated",
@@ -138,7 +138,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const User = new user_model_1.UserModel();
         const userData = yield User.isExists(userId);
         if (userData) {
-            const result = yield user_services_1.UserServices.DeleteOneUser(userId);
+            yield user_services_1.UserServices.DeleteOneUser(userId);
             res.status(200).json({
                 success: true,
                 message: "User deleted successfully",
@@ -171,7 +171,7 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { error, value } = yield user_validator_1.orderSchema.validate(req.body);
         const userData = yield User.isExists(userId);
         if (userData && !error) {
-            const result = yield user_services_1.UserServices.addOrder(userId, value);
+            yield user_services_1.UserServices.addOrder(userId, value);
             res.status(200).json({
                 success: true,
                 message: "Order created successfully!",

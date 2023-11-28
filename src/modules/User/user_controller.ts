@@ -40,7 +40,7 @@ const editUser = async (req: Request, res: Response) => {
     const userData = await User.isExists(userId);
 
     if (userData) {
-      const { error, value } = await userSchemaValidator.validate(user);
+      const { error } = await userSchemaValidator.validate(user);
 
       if (error) {
         res.status(400).json({
@@ -49,10 +49,11 @@ const editUser = async (req: Request, res: Response) => {
           error: error.details,
         });
       } else {
-        const result = UserServices.UpdateOneUser(userId, req.body.user);
+        const result = await UserServices.UpdateOneUser(userId, req.body.user);
         res.status(200).json({
           success: true,
           message: "User Updated",
+          data: result,
         });
       }
     } else {
@@ -132,7 +133,7 @@ const deleteUser = async (req: Request, res: Response) => {
 
     const userData = await User.isExists(userId);
     if (userData) {
-      const result = await UserServices.DeleteOneUser(userId);
+      await UserServices.DeleteOneUser(userId);
       res.status(200).json({
         success: true,
         message: "User deleted successfully",
@@ -164,7 +165,7 @@ const addOrder = async (req: Request, res: Response) => {
     const { error, value } = await orderSchema.validate(req.body);
     const userData = await User.isExists(userId);
     if (userData && !error) {
-      const result = await UserServices.addOrder(userId, value);
+      await UserServices.addOrder(userId, value);
       res.status(200).json({
         success: true,
         message: "Order created successfully!",

@@ -1,6 +1,7 @@
-import { Schema, model, connect } from "mongoose";
+import { Schema, model } from "mongoose";
 import { Order, User, UsermethodModel, Usermethods } from "./user_interface";
-
+import bcrypt from "bcrypt";
+import config from "../../config";
 const orderSchema = new Schema<Order>({
   productName: { type: String, required: true },
   price: { type: Number, required: true },
@@ -32,6 +33,12 @@ userSchema.method("isExists", async function (id: number) {
     { _id: 0, password: 0, age: 0, orders: 0 }
   );
   return existingUser;
+});
+userSchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.b_salt_round));
+  next();
 });
 
 export const UserModel = model<User, UsermethodModel>("User", userSchema);
