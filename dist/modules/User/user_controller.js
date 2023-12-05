@@ -15,7 +15,7 @@ const user_model_1 = require("./user_model");
 const user_validator_1 = require("./user_validator");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { user } = req.body;
+        const user = req.body;
         const { error, value } = user_validator_1.userSchemaValidator.validate(user);
         // console.log({ error }, { value });
         if (error) {
@@ -44,12 +44,14 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { user } = req.body;
+        const user = req.body;
         const { userId } = req.params;
         const User = new user_model_1.UserModel();
         const userData = yield User.isExists(userId);
+        console.log(userData);
         if (userData) {
             const { error } = yield user_validator_1.userSchemaValidator.validate(user);
+            console.log(error);
             if (error) {
                 res.status(400).json({
                     success: false,
@@ -58,7 +60,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 });
             }
             else {
-                const result = yield user_services_1.UserServices.UpdateOneUser(userId, req.body.user);
+                const result = yield user_services_1.UserServices.UpdateOneUser(userId, req.body);
                 res.status(200).json({
                     success: true,
                     message: "User Updated",
