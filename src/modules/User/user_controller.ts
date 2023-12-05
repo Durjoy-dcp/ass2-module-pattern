@@ -5,7 +5,7 @@ import { orderSchema, userSchemaValidator } from "./user_validator";
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
     const { error, value } = userSchemaValidator.validate(user);
     // console.log({ error }, { value });
     if (error) {
@@ -33,14 +33,16 @@ const createUser = async (req: Request, res: Response) => {
 
 const editUser = async (req: Request, res: Response) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
     const { userId } = req.params;
 
     const User = new UserModel();
     const userData = await User.isExists(userId);
+    console.log(userData);
 
     if (userData) {
       const { error } = await userSchemaValidator.validate(user);
+      console.log(error);
 
       if (error) {
         res.status(400).json({
@@ -49,7 +51,7 @@ const editUser = async (req: Request, res: Response) => {
           error: error.details,
         });
       } else {
-        const result = await UserServices.UpdateOneUser(userId, req.body.user);
+        const result = await UserServices.UpdateOneUser(userId, req.body);
         res.status(200).json({
           success: true,
           message: "User Updated",
